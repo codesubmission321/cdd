@@ -1,0 +1,73 @@
+Metadata-Version: 2.1
+Name: antlerinator
+Version: 4.7.1.post1
+Summary: ANTLeRinator
+Home-page: https://github.com/renatahodovan/antlerinator
+Author: Renata Hodovan, Akos Kiss
+Author-email: hodovan@inf.u-szeged.hu, akiss@inf.u-szeged.hu
+License: BSD
+License-File: LICENSE.rst
+
+============
+ANTLeRinator
+============
+
+*ANTLeRinator* is a Python utility package to help keeping components of
+ANTLR v4 in sync.
+
+
+Requirements
+============
+
+* Python_ ~= 2.7 or >= 3.4
+* pip_ and setuptools Python packages (the latter is automatically installed by
+  pip)
+* Java_ SE >= 7 JRE or JDK (the latter is optional)
+
+.. _Python: https://www.python.org
+.. _pip: https://pip.pypa.io
+.. _Java: https://www.oracle.com/java/
+
+
+Install
+=======
+
+The quick way::
+
+    pip install antlerinator
+
+Alternatively, by cloning the project and running setuptools::
+
+    python setup.py install
+
+
+Usage
+=====
+
+A common form of *ANTLeRinator*'s usage:
+
+.. code-block:: python
+
+    import antlerinator
+    import argparse
+    import subprocess
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--antlr', default=antlerinator.antlr_jar_path)
+    args = parser.parse_args()
+
+    if (args.antlr == antlerinator.antlr_jar_path):
+        antlerinator.install(lazy=True)
+    subprocess.call(['java', '-jar', args.antlr])
+
+Should there be need for manual jar installation, a helper script is available::
+
+    antlerinator-install
+
+
+Copyright and Licensing
+=======================
+
+Licensed under the BSD 3-Clause License_.
+
+.. _License: LICENSE.rst

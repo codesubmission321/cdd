@@ -1,0 +1,21 @@
+*.o
+*.log
+*.out
+*.ast
+
+test/*/chisel-out/
+test/*/*.origin.c
+test/*/*.chisel.c
+
+build/
+*.csv
+
+# vim swap files
+.*.sw?
+.ycm_extra_conf.py
+
+# Mac OSX specific files
+.DS_store
+
+# vim plugin
+.ycm_extra_conf.py

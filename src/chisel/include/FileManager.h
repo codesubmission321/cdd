@@ -17,6 +17,8 @@ public:
   std::string getTempFileName(std::string Suffix);
   void saveTemp(std::string Phase, bool Status);
 
+  void saveTempSuccess();
+
 private:
   FileManager() {}
   ~FileManager() {}

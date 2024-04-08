@@ -22,7 +22,7 @@ void Report::print() {
   spdlog::get("Logger")->info(Bar);
   spdlog::get("Logger")->info("{:^52}", "Report");
   spdlog::get("Logger")->info(Bar);
-  spdlog::get("Logger")->info("{:>25}{:>21.1f}s", "Total Time :",
+  spdlog::get("Logger")->info("{:>25}{:>21.1f}s", "execution time:",
                               Prof->getChiselTimeRecord().getWallTime());
   spdlog::get("Logger")->info("{:>25}{:>21.1f}s", "Oracle Time :",
                               Prof->getOracleTimeRecord().getWallTime());

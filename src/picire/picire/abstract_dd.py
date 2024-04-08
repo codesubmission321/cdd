@@ -8,6 +8,7 @@
 import itertools
 import logging
 import random
+import time
 
 from .outcome_cache import OutcomeCache
 
@@ -28,7 +29,7 @@ class AbstractDD(object):
     PASS = 'PASS'
     FAIL = 'FAIL'
 
-    def __init__(self, test, split, cache=None, id_prefix=(), onepass=False, start_from_n=None):
+    def __init__(self, test, split, cache=None, id_prefix=(), other_config={}):
         """
         Initialise an abstract DD class. Not to be called directly, only by
         super calls in subclass initializers.
@@ -42,8 +43,8 @@ class AbstractDD(object):
         self._split = split
         self._cache = cache or OutcomeCache()
         self._id_prefix = id_prefix
-        self.onepass = onepass
-        self.start_from_n = start_from_n
+        self.onepass = other_config["onepass"]
+        self.start_from_n = other_config["start_from_n"]
         self.delete_history = []
 
 
@@ -137,7 +138,7 @@ class AbstractDD(object):
 
         return cached_result
 
-    def _test_config(self, config, config_id):
+    def _test_config(self, config_idx, config_unique_id):
         """
         Test a single configuration and save the result in cache.
 
@@ -146,14 +147,17 @@ class AbstractDD(object):
             identifiable directories.
         :return: PASS or FAIL
         """
-        config_id = self._id_prefix + config_id
+        config_unique_id = self._id_prefix + config_unique_id
 
-        logger.debug('\t[ %s ]: test...', self._pretty_config_id(config_id))
-        outcome = self._test(self.idx2config(config), config_id)
-        logger.debug('\t[ %s ]: test = %r', self._pretty_config_id(config_id), outcome)
+        logger.debug('\t[ %s ]: test...', self._pretty_config_id(config_unique_id))
+        tstart = time.time()
+        config = self.idx2config(config_idx)
+        outcome = self._test(config, config_unique_id)
+        logger.info("execution time of this test: " + str(time.time() - tstart) + "s")
+        logger.debug('\t[ %s ]: test = %r', self._pretty_config_id(config_unique_id), outcome)
 
-        if 'assert' not in config_id:
-            self._cache.add(config, outcome)
+        if 'assert' not in config_unique_id:
+            self._cache.add(config_idx, outcome)
 
         return outcome
 

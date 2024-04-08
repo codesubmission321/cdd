@@ -1,4 +1,4 @@
-# Artifact for "CDD: A Simple Yet Effective Counter-Based Model for Delta Debugging"
+# Artifact for "Toward a Better Understandings of Probabilistic Delta Debugging"
 
 ## Introduction
 
@@ -35,8 +35,8 @@ To evaluate this artifact, a Linux machine with [docker](https://docs.docker.com
    # You should be at /tmp after the above command finishes
    # Your user name should be `coq` and all the following command are executed in docker
 
-   # the root folder of the project is /home/coq/demystifying_probdd
-   cd /home/coq/demystifying_probdd
+   # the root folder of the project is /home/coq/cdd
+   cd /home/coq/cdd
    ```
 
 ### Benchmark Suites
@@ -53,7 +53,7 @@ benchmark suite are in folder `./benchmarks`.
 In the container, run the following commands to build the tools.
 
 ```bash
-cd /home/coq/demystifying_probdd
+cd /home/coq/cdd
 ./scripts/build_hdd.sh
 ./scripts/build_chisel.sh
 ```
@@ -63,7 +63,7 @@ cd /home/coq/demystifying_probdd
 1. Evaluate DDMIN, ProbDD and CDD on 20 programs triggering compiler bugs.
 
    ```bash
-   cd /home/coq/demystifying_probdd
+   cd /home/coq/cdd
 
    # evaluate algorithms on 20 compiler bugs.
 
@@ -86,17 +86,17 @@ cd /home/coq/demystifying_probdd
 2. Results and log.
 
    Note that every time you start `./run_chisel.sh`, a folder named by current timestamp is created in
-   `~/demystifying_probdd/results/hdd`.
-   For instance, if current time is 2023/09/12,23:06:25, all results produced by this run will be saved in `~/demystifying_probdd/results/hdd/20230912230625/`. Besides, there is a config.txt recording the options in this run, under the folder `20230912230625`.
+   `~/cdd/results/hdd`.
+   For instance, if current time is 2023/09/12,23:06:25, all results produced by this run will be saved in `~/cdd/results/hdd/20230912230625/`. Besides, there is a config.txt recording the options in this run, under the folder `20230912230625`.
 
    Summarize the result in this run.
 
    ```bash
-   cd ~/demystifying_probdd/results/hdd/20230912230625/
-   python ~/demystifying_probdd/script/summarize_hdd.py .
+   cd ~/cdd/results/hdd/20230912230625/
+   python ~/cdd/script/summarize_hdd.py .
    ```
 
-   Then, file `summary.csv` will be saved in `~/demystifying_probdd/results/hdd/20230912230625/`.
+   Then, file `summary.csv` will be saved in `~/cdd/results/hdd/20230912230625/`.
    In `summary.csv`, data such as time, final size and query number for each benchmark is displayed.
 
 3. Evaluate DDMIN, ProbDD and CDD on 10 programs in software debloating.
@@ -120,8 +120,8 @@ cd /home/coq/demystifying_probdd
    Similarly, results will be stored in a folder named by current timestamp, under `~/results/chisel`. Run `summarize_chisel.py` to generate `summary.csv`.
 
    ```bash
-   cd ~/demystifying_probdd/results/chisel/20230912230625/
-   python ~/demystifying_probdd/script/summarize_chisel.py .
+   cd ~/cdd/results/chisel/20230912230625/
+   python ~/cdd/script/summarize_chisel.py .
    ```
 
 ### Reproduce RQ3: Performance of ProbDD and CDD with Different Initial Probabilities

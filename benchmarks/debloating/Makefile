@@ -2,7 +2,7 @@ all: dep bzip2 chown date grep gzip mkdir rm sort tar uniq
 
 dep:
 	# build the dependencies
-	make -C /home/coq/demystifying_probdd/benchmarks/debloating/lib
+	make -C /home/coq/cdd/benchmarks/debloating/lib
 
 bzip2:
 	clang-7 -w bzip2-1.0.5/bzip2-1.0.5.c -o bzip2-1.0.5/bzip2-1.0.5.origin

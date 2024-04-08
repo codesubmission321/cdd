@@ -36,6 +36,13 @@ void FileManager::saveTemp(std::string Phase, bool Status) {
   }
 }
 
+void FileManager::saveTempSuccess() {
+  llvm::sys::fs::copy_file(OptionManager::InputFile,
+                           OptionManager::OutputDir + "/" +
+                               Basename(OptionManager::InputFile)
+                           );
+}
+
 std::string FileManager::Readlink(std::string &Name) {
   std::string buffer(64, '\0');
   ssize_t len;

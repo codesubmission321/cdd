@@ -40,7 +40,7 @@ private:
   std::map<std::vector<int>,bool> mp1;
   std::map<DDElementVector,bool> mp;
   DDElementSet doProbDD(DDElementVector &Decls);
-  DDElementSet doCounterDD(DDElementVector &Decls);
+  DDElementSet doCDD(DDElementVector &Decls);
   DDElementSet doChiselDD(DDElementVector &Decls);
   DDElementSet doFastDD(DDElementVector &Decls);
   DDElementSet doSimplifiedProbDD(DDElementVector &Decls);

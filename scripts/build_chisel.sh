@@ -1,5 +1,6 @@
 #! /bin/bash
-root=/home/coq/demystifying_probdd
+root=$(pwd)
+cd ${root}
 cd ${root}/src/chisel
 cmake -S . -B ${root}/build
 cd ${root}/build

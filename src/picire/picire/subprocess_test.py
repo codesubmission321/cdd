@@ -12,7 +12,7 @@ import shutil
 from subprocess import Popen
 
 from .abstract_dd import AbstractDD
-from .abstract_probdd import AbstractProbDD
+from .abstract_cdd import AbstractCDD
 
 
 class SubprocessTest(object):
@@ -76,7 +76,7 @@ class SubprocessTest(object):
             shutil.rmtree(test_dir)
 
         # Determine outcome.
-        return AbstractProbDD.PASS if proc.returncode == 0 else AbstractProbDD.FAIL
+        return AbstractCDD.PASS if proc.returncode == 0 else AbstractCDD.FAIL
 
 
 class ConcatTestBuilder(object):

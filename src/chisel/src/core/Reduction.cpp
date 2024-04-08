@@ -14,6 +14,7 @@
 #include "OptionManager.h"
 #include "Profiler.h"
 #include "Report.h"
+#include "FileManager.h"
 
 #include <random>
 #include <string>
@@ -542,6 +543,7 @@ DDElementSet Reduction::doProbDD(DDElementVector &Decls) {
 
     if (status) { // safely delete and update the model
       spdlog::get("Logger")->info("Deleted: {}", indicesToBeRemoved);
+      FileManager::GetInstance()->saveTempSuccess();
       configSize -= index.size();
       auto TargetSet = toSet(program);
       Removed.insert(TargetSet.begin(), TargetSet.end());
@@ -573,9 +575,9 @@ DDElementSet Reduction::doProbDD(DDElementVector &Decls) {
   return Removed;
 }
 
-// algorithm of ProbDD
-DDElementSet Reduction::doCounterDD(DDElementVector &Decls) {
-  spdlog::get("Logger")->info("Running CounterDD - Size: {}", Decls.size());
+// algorithm of CDD
+DDElementSet Reduction::doCDD(DDElementVector &Decls) {
+  spdlog::get("Logger")->info("Running CDD - Size: {}", Decls.size());
   mp1.clear();
   DDElementSet Removed;
   std::map< std::vector<int>, std::map< int, double > > recordDelta; 
@@ -619,6 +621,7 @@ DDElementSet Reduction::doCounterDD(DDElementVector &Decls) {
 
     if (status) { // safely delete and update the model
       spdlog::get("Logger")->info("Deleted: {}", indicesToBeRemoved);
+      FileManager::GetInstance()->saveTempSuccess();
       configSize -= index.size();
       auto TargetSet = toSet(program);
       Removed.insert(TargetSet.begin(), TargetSet.end());
@@ -740,6 +743,7 @@ DDElementSet Reduction::doFastDD(DDElementVector &Decls) {
         removed.insert(toBeRemovedSet.begin(), toBeRemovedSet.end());
         declsCopy.erase(declsCopy.begin()+idx, declsCopy.begin()+end_idx);
         spdlog::get("Logger")->info("Deleted: {}", indicesToBeRemoved);
+        FileManager::GetInstance()->saveTempSuccess();
 	update_file(toBeRemoved.size(), "success");
       }
       else {
@@ -790,6 +794,7 @@ DDElementSet Reduction::doSimplifiedProbDD(DDElementVector &Decls) {
         removed.insert(toBeRemovedSet.begin(), toBeRemovedSet.end());
         declsCopy.erase(declsCopy.begin()+idx, declsCopy.begin()+end_idx);
         spdlog::get("Logger")->info("Deleted: {}", indicesToBeRemoved);
+        FileManager::GetInstance()->saveTempSuccess();
       }
       else {
         idx += chunkSize;
@@ -874,6 +879,7 @@ DDElementSet Reduction::doDdmin(DDElementVector &Decls) {
       removed.insert(toBeRemovedSet.begin(), toBeRemovedSet.end());
       spdlog::get("Logger")->info("Try deleting: [0]");
       spdlog::get("Logger")->info("Deleted");
+      FileManager::GetInstance()->saveTempSuccess();
       return removed;
     }
   }
@@ -926,6 +932,7 @@ DDElementSet Reduction::doDdmin(DDElementVector &Decls) {
           auto toBeRemovedSet = toSet(toBeRemoved);
           removed.insert(toBeRemovedSet.begin(), toBeRemovedSet.end());
           spdlog::get("Logger")->info("Deleted(complement of): {}", indicesToBeRemoved);
+          FileManager::GetInstance()->saveTempSuccess();
           indices = indexPartition;
           n = 2;
           goto outerLoop;
@@ -961,6 +968,7 @@ DDElementSet Reduction::doDdmin(DDElementVector &Decls) {
         auto toBeRemovedSet = toSet(toBeRemoved);
         removed.insert(toBeRemovedSet.begin(), toBeRemovedSet.end());
         spdlog::get("Logger")->info("Deleted: {}", indicesToBeRemoved);
+        FileManager::GetInstance()->saveTempSuccess();
         indices = indexComplement;
         n--;
         goto outerLoop;
@@ -984,8 +992,8 @@ DDElementSet Reduction::doDeltaDebugging(DDElementVector &Decls) {
   if (OptionManager::Algorithm.compare("probdd") == 0) {
     removed = doProbDD(Decls);
   }  
-  else if (OptionManager::Algorithm.compare("counterdd") == 0) {
-    removed = doCounterDD(Decls);
+  else if (OptionManager::Algorithm.compare("cdd") == 0) {
+    removed = doCDD(Decls);
   }
   else if (OptionManager::Algorithm.compare("chiseldd") == 0) {
     removed = doChiselDD(Decls);

@@ -334,6 +334,7 @@ def execute():
     The main entry point of picireny.
     """
 
+    # parents=[picire.cli.create_parser()] will import flags from picire
     arg_parser = ArgumentParser(description='CLI for the Picireny Hierarchical Delta Debugging Framework',
                                 parents=[picire.cli.create_parser()], add_help=False)
 
@@ -382,14 +383,6 @@ def execute():
     srcml_grp.add_argument('--srcml:language', dest='srcml_language', metavar='LANG', choices=['C', 'C++', 'C#', 'Java'],
                            help='language of the input (%(choices)s; default: %(default)s)')
 
-    # Ddmin settings
-    arg_parser.add_argument('--dd', metavar='NAME', choices=['ddmin', 'probdd', 'fastdd', 'simplifiedprobdd', 'counterdd'], default='ddmin',
-                            help='DD variant to run (%(choices)s; default: %(default)s)')
-    arg_parser.add_argument('--onepass', default=False, action='store_true', help='do not reset index to 0 when a partition is deleted')
-    arg_parser.add_argument('--id', metavar='NUMBER', type=int, default=0, help='just used for identify each trail')
-    arg_parser.add_argument('--start-from-n', metavar='NUMBER', type=int, default=None, help='partition size start from a specified number, instead of half of the total size')
-    arg_parser.add_argument('--init-probability', metavar='NUMBER', type=float, default=0.1, help='provide the initial probability for probdd, default value is 0.1')
-    
     args = arg_parser.parse_args()
     process_args(arg_parser, args)
 

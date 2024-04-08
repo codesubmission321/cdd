@@ -8,6 +8,7 @@
 from __future__ import absolute_import
 
 from logging import *
+import sys
 
 
 TRACE = DEBUG // 2
@@ -30,5 +31,12 @@ __getLogger = getLogger
 
 def getLogger(name=None):
     logger = __getLogger(name)
+    logger.propagate = False
+    
+    handler = StreamHandler(sys.stdout)
+    formatter = Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
     logger.trace = lambda msg, *args, **kwargs: logger.log(TRACE, msg, *args, **kwargs)
     return logger

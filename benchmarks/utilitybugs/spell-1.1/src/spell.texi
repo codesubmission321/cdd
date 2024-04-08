@@ -1,0 +1,244 @@
+\input texinfo @c -*-texinfo-*-
+@comment %**start of header
+@setfilename spell.info
+@include version.texi
+@settitle GNU Spell @value{VERSION}
+
+@c Combine indices.
+@syncodeindex ky cp
+@syncodeindex pg cp
+@syncodeindex tp cp
+@defcodeindex op
+@syncodeindex op cp
+@syncodeindex vr cp
+@comment %**end of header
+@copying
+This manual is for GNU Spell (version @value{VERSION}, @value{UPDATED}),
+a clone of Unix @command{spell}..
+
+Copyright @copyright{} 1996,2010 Free Software Foundation, Inc.
+
+@quotation
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with no Front-Cover Texts, and with no Back-Cover
+Texts.  A copy of the license is included in the section entitled
+``GNU Free Documentation License''.
+@end quotation
+@end copying
+
+@dircategory Text creation and manipulation
+@direntry
+* spell: (spell).               prints each misspelled word.
+@end direntry
+
+@titlepage
+@title GNU Spell
+@subtitle Unix spell clone
+@subtitle for version @value{VERSION}, @value{UPDATED}
+@author Thomas Morgan et al.
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@contents
+
+@ifnottex
+@node Top
+@top spell
+
+This manual is for GNU Spell (version @value{VERSION}, @value{UPDATED}).
+
+@insertcopying
+@end ifnottex
+
+@menu
+* Introduction::	Introduction.
+* Invoking Spell::	How to run Spell.
+* Example::             An example run.
+* Problems::		Reporting bugs.
+* Copying::             License terms for this manual.
+* Index::		Combined index.
+@end menu
+
+@node Introduction
+@chapter Introduction
+
+@cindex overview
+
+GNU Spell is a spell checking program which prints each misspelled word
+on a line of its own.  It is designed as a clone of the standard Unix
+@command{spell} program, and implemented as a wrapper for Ispell.  Spell
+accepts as its arguments a list of files to read from.  Within that
+list, the magical file name @samp{-} causes Spell to read from standard
+input.  In addition, when called with no file name arguments, Spell
+assumes that it should process standard input.
+
+Spell is most useful when used in conjunction with other programs,
+because its output is minimalistic.  Human users are usually more
+comfortable with verbose output.  @inforef{Top, The Ispell Manual,
+ispell}, for an screen-oriented spelling checker.
+
+@node Invoking Spell
+@chapter Invoking @command{spell}
+@cindex invoking
+@cindex version
+@cindex options
+@cindex usage
+@cindex help
+@cindex getting help
+
+The format for running GNU Spell is:
+
+@example
+spell [@var{option}]@dots{} [@var{file}]@dots{}
+@end example
+
+Spell supports the following options:
+
+@table @samp
+@item --version
+@itemx -V
+Print the version number of Spell on the standard error output and then
+exit.
+
+@item --british
+@itemx -b
+Use the British dictionary rather than American.  Unavailable unless
+this dictionary was installed with Ispell.
+
+@item --dictionary=@var{file}
+@itemx -d @var{file}
+Use the named dictionary.
+
+@item --help
+@itemx -h
+Print an informative help message describing the options and then exit.
+
+@item --ispell=@var{program}
+@itemx -i @var{program}
+Call @var{program} as Ispell.
+
+@item --all-chains
+@itemx -l
+Ignored; for compatibility.
+
+@item --number
+@itemx -n
+Print the line number of each misspelled word along with the word
+itself.
+
+@item --print-file-name
+@itemx -o
+Print the file name which contained the misspelled words on each line
+before the word.
+
+@item --stop-list=@var{file}
+@itemx -s @var{file}
+Ignored; for compatibility.
+
+@item --verbose
+@itemx -v
+When a word is not found in its literal form in the dictionary, it is
+printed.
+
+@item --print-stems
+@itemx -x
+Ignored; for compatibility.
+
+@end table
+
+@node Example
+@chapter Example
+@cindex example
+@cindex sample
+
+Using GNU Spell is quite simple.  Here's an example, which you can try
+when in the directory of Spell's source code.
+
+@example
+$ spell --print-file-name --number sample
+sample:1: Tihs
+sample:1: si
+sample:1: fo
+sample:1: Splel
+sample:1: worsd
+sample:1: spellled
+sample:1: worng
+sample:2: fi
+sample:2: cna
+sample:2: dael
+sample:2: fiel
+sample:2: Foo
+sample:2: bza
+sample:2: baz
+@end example
+
+The words printed on standard output are all the (purposely) misspelled
+words in @file{sample}.  Notice the options @samp{--print-file-name} and
+@samp{--number} (@pxref{Invoking Spell}).  They are responsible for the
+prefix you see on each line, @samp{sample:@var{lineno} }.
+
+@node Problems
+@chapter Problems
+@cindex bugs
+@cindex problems
+@cindex suggestions
+
+If you find a bug in GNU Spell, or have any questions, comments, or
+suggestions about it, please send electronic mail to
+@samp{bug-gnu-utils@@gnu.org}.  When sending bug reports,
+include the version number, which you can find by running @w{@samp{spell
+--version}}. 
+The Savannah bug tracker for @command{spell} is located at
+@url{http://savannah.gnu.org/bugs/?group=spell}.
+Also include in your message the operating system you are
+using, the output that the program produced, the output you expected,
+which options you invoked Spell with, and any other details that you
+think may be useful.  Keep in mind that facts are more usually more
+helpful than guesses.@refill
+
+@node Copying
+@chapter Copying
+@cindex copying
+
+GNU spell is licensed under the GNU GPL, which makes it @dfn{free
+software}.
+
+The ``free'' in ``free software'' refers to liberty, not price. As
+some GNU project advocates like to point out, think of ``free speech''
+rather than ``free beer''.  In short, you have the right (freedom) to
+run and change spell and distribute it to other people, and---if you
+want---charge money for doing either.  The important restriction is
+that you have to grant your recipients the same rights and impose the
+same restrictions.
+
+This general method of licensing software is sometimes called
+@dfn{open source}.  The GNU project prefers the term ``free software''
+for reasons outlined at
+@url{http://www.gnu.org/philosophy/open-source-misses-the-point.html}.
+
+This manual is free documentation in the same sense.  The
+documentation license is included below.  The license for the program
+is available with the source code, or at
+@url{http://www.gnu.org/licenses/gpl.html}.
+
+@menu
+* GNU Free Documentation License::
+@end menu
+
+@node GNU Free Documentation License
+@section GNU Free Documentation License
+
+@include fdl.texi
+
+
+@node Index
+@unnumbered Index
+
+@printindex cp
+
+@bye
+

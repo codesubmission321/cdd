@@ -1,0 +1,4 @@
+chardet
+inators
+psutil
+setuptools

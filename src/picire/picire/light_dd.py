@@ -10,7 +10,7 @@ import logging
 from . import config_iterators
 from . import config_splitters
 from .abstract_dd import AbstractDD
-from .outcome_cache import ConfigCache
+from . import utils
 
 logger = logging.getLogger(__name__)
 
@@ -20,9 +20,9 @@ class LightDD(AbstractDD):
     Single process version of the Delta Debugging algorithm.
     """
 
-    def __init__(self, test, cache=None, id_prefix=(), onepass=False, start_from_n=None,
+    def __init__(self, test, cache=None, id_prefix=(),
                  split=config_splitters.zeller,
-                 subset_first=True, subset_iterator=config_iterators.forward, complement_iterator=config_iterators.forward):
+                 subset_first=True, subset_iterator=config_iterators.forward, complement_iterator=config_iterators.forward, **other_config):
         """
         Initialize a LightDD object.
 
@@ -37,9 +37,9 @@ class LightDD(AbstractDD):
         :param complement_iterator: Reference to a generator function that
             provides config indices in an arbitrary order.
         """
-        cache = cache or ConfigCache()
+        cache = None
 
-        AbstractDD.__init__(self, test, split, cache=cache, id_prefix=id_prefix, onepass=onepass, start_from_n=start_from_n)
+        AbstractDD.__init__(self, test, split, cache=cache, id_prefix=id_prefix, other_config=other_config)
 
         self._subset_iterator = subset_iterator
         self._complement_iterator = complement_iterator
@@ -90,13 +90,15 @@ class LightDD(AbstractDD):
                     continue
                 else:
                     self.delete_history.append(subsets[i])
-            self.printIdx(subsets[i], "Try deleting(complement of)")
+            log_to_print = utils.generate_log(subsets[i], "Try deleting(complement of)", print_idx=True, threshold=30)
+            logger.info(log_to_print)
 
-            # Get the outcome either from cache or by testing it.
-            outcome = self._lookup_cache(subset, config_id) or self._test_config(subset, config_id)
+            # Get the outcome by testing it.
+            outcome = self._test_config(subset, config_id)
             if outcome == self.PASS:
                 # Interesting subset is found.
-                self.printIdx(subsets[i], "Deleted(complement of)")
+                log_to_print = utils.generate_log(subsets[i], "Deleted(complement of)", print_idx=True, threshold=30)
+                logger.info(log_to_print)
                 return [subsets[i]], 0
 
         return None, complement_offset
@@ -126,21 +128,17 @@ class LightDD(AbstractDD):
                     continue
                 else:
                     self.delete_history.append(subsets[i])
-            self.printIdx(subsets[i], "Try deleting")
+            log_to_print = utils.generate_log(subsets[i], "Try deleting", print_idx=True, threshold=30)
+            logger.info(log_to_print)
 
-            outcome = self._lookup_cache(complement, config_id) or self._test_config(complement, config_id)
+            outcome = self._test_config(complement, config_id)
             if outcome == self.PASS:
                 # Interesting complement is found.
                 # In next run, start removing the following subset
-                self.printIdx(subsets[i], "Deleted")
+                log_to_print = utils.generate_log(subsets[i], "Deleted", print_idx=True, threshold=30)
+                logger.info(log_to_print)
                 iterator.reset()
                 return subsets[:i] + subsets[i + 1:], 0
 
         return None, complement_offset
 
-    def printIdx(self, config, info):
-        indices = []
-        for item in config:
-            indices.append(item)
-        indices.sort()
-        logger.info("\t%s: %r" % (info, indices))

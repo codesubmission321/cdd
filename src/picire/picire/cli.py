@@ -22,8 +22,7 @@ from . import logging
 from .combined_iterator import CombinedIterator
 from .combined_parallel_dd import CombinedParallelDD
 from .light_dd import LightDD
-from .prob_dd import ProbDD
-from .counter_dd import CounterDD
+from .cdd import CDD
 from .simplifiedprob_dd import SimplifiedProbDD
 from .fast_dd import FastDD
 from .parallel_dd import ParallelDD
@@ -93,6 +92,14 @@ def create_parser():
                         help='working directory (default: input.timestamp)')
     parser.add_argument('--disable-cleanup', dest='cleanup', default=True, action='store_false',
                         help='disable the removal of generated temporary files')
+    
+     # Ddmin settings
+    parser.add_argument('--dd', metavar='NAME', choices=['ddmin', 'probdd', 'fastdd', 'simplifiedprobdd', 'cdd'], default='ddmin',
+                            help='DD variant to run (%(choices)s; default: %(default)s)')
+    parser.add_argument('--onepass', default=False, action='store_true', help='do not reset index to 0 when a partition is deleted')
+    parser.add_argument('--id', metavar='NUMBER', type=int, default=0, help='just used for identify each trail')
+    parser.add_argument('--start-from-n', metavar='NUMBER', type=int, default=None, help='partition size start from a specified number, instead of half of the total size')
+    parser.add_argument('--init-probability', metavar='NUMBER', type=float, default=0.1, help='provide the initial probability for probdd, default value is 0.1')
     return parser
 
 
@@ -136,16 +143,14 @@ def process_args(parser, args):
     # Choose the reducer class that will be used and its configuration.
     args.reduce_config = {'split': split_class(n=args.granularity)}
     if not args.parallel:
-        if (args.dd == 'probdd'):
-            args.reduce_class = ProbDD
+        if (args.dd == 'probdd' or args.dd == 'cdd'):
+            args.reduce_class = CDD
         elif (args.dd == 'ddmin'):
             args.reduce_class = LightDD
         elif (args.dd == 'fastdd'):
             args.reduce_class = FastDD
         elif (args.dd == 'simplifiedprobdd'):
             args.reduce_class = SimplifiedProbDD
-        elif (args.dd == 'counterdd'):
-            args.reduce_class = CounterDD
         
         args.reduce_config['subset_iterator'] = subset_iterator
         args.reduce_config['complement_iterator'] = complement_iterator
@@ -164,6 +169,13 @@ def process_args(parser, args):
             args.reduce_config['subset_iterator'] = subset_iterator
             args.reduce_config['complement_iterator'] = complement_iterator
             args.reduce_config['subset_first'] = args.subset_first
+
+    # configs about probdd and cdd
+    args.reduce_config['onepass'] = args.onepass
+    args.reduce_config['start_from_n'] = args.start_from_n
+    args.reduce_config['init_probability'] = args.init_probability
+    args.reduce_config['id'] = args.id
+    args.reduce_config['dd'] = args.dd
 
     args.out = realpath(args.out if args.out else '%s.%s' % (args.input, time.strftime('%Y%m%d_%H%M%S')))
 
@@ -286,7 +298,6 @@ def call(reduce_class, reduce_config,
 
 
 def execute():
-    print("enter cli.py:execute()")
     """
     The main entry point of picire.
     """
@@ -298,11 +309,13 @@ def execute():
     parser.add_argument('--version', action='version', version='%(prog)s {version}'.format(version=__version__))
 
     args = parser.parse_args()
+    print(args)
     process_args(parser, args)
 
     logging.basicConfig(format='%(message)s')
     logger.setLevel(args.log_level)
 
+    tstart = time.time()
     call(reduce_class=args.reduce_class,
          reduce_config=args.reduce_config,
          tester_class=args.tester_class,
@@ -313,4 +326,6 @@ def execute():
          out=args.out,
          atom=args.atom,
          cache_class=args.cache,
-         cleanup=args.cleanup)
+         cleanup=args.cleanup,
+         )
+    print("execution time: " + str(time.time() - tstart) + "s")

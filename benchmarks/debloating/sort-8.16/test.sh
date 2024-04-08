@@ -1,6 +1,6 @@
 #!/bin/bash
 export CC=clang-7
-export CHISEL_BENCHMARK_HOME=/home/coq/demystifying_probdd/benchmarks/debloating
+export CHISEL_BENCHMARK_HOME=/home/coq/cdd/benchmarks/debloating
 export NAME=sort-8.16
 export BENCHMARK_DIR=$CHISEL_BENCHMARK_HOME/$NAME
 export SRC=./$NAME.c

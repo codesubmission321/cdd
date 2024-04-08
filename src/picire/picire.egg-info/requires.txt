@@ -1,3 +1,0 @@
-chardet
-psutil
-setuptools

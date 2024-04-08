@@ -36,7 +36,7 @@ void OptionManager::showUsage() {
       << "  --debug                Print debug information\n"
       << "  --stat                 Count the number of statements\n"
       << "  --xref                 Visualize the results only\n"
-      << "  --algorithm            Algorithm used to reduce a list, default: chiseldd, candidates: probdd, chiseldd, fastdd, simplifiedprobdd, counterdd \n"
+      << "  --algorithm            Algorithm used to reduce a list, default: chiseldd, candidates: probdd, chiseldd, fastdd, simplifiedprobdd, cdd \n"
       << "  --id            Specify the id of this trail (for experiment) \n";
 }
 

@@ -15,7 +15,7 @@ with open(join(dirname(__file__), 'picireny/VERSION'), 'rb') as f:
     try:
         git_version = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"]).decode('ascii').strip()
         if git_version:
-            version = f"{version}+{git_version}"
+            version = f"{version}+git{git_version}"
     except subprocess.CalledProcessError:
         pass
 

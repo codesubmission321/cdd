@@ -57,7 +57,7 @@ echo "" >> ${config_path}
 
 # init arguments
 args_for_tool=""
-benchmarks=('as-2.30' 'bison-3.0.4' 'checknr-8.1' 'ctags-8.4' 'dc-1.3' 'dc-1.4' 'gdb-8.1' 'indent-5.17' 'ptx-8.32' 'spell-1.1' 'troff-1.19.2')
+benchmarks=('as-2.30' 'bison-3.0.4' 'checknr-8.1' 'ctags-8.4' 'dc-1.3' 'dc-1.4' 'flex-2.5.39' 'gdb-8.1' 'indent-5.17' 'lldb-7.1.0' 'ptx-8.32' 'spell-1.1' 'troff-1.19.2')
 max_jobs=1
 
 # --args_for_tool is mandatory
@@ -130,7 +130,7 @@ for benchmark in "${benchmarks[@]}"; do
 
         # record picireny version and run the benchmark
         picire --version > ${log_path}
-        timeout -s 9 10800s picire -i input --test r.sh --cache none --atom char -j 1 -u 1 ${args_for_tool} >> ${log_path} 2>&1
+        timeout -s 9 10800s picire -i input --test r.sh --cache none -j 1 -u 1 ${args_for_tool} >> ${log_path} 2>&1
         ret=$?
         if [ $ret -eq 137 ]; then
           echo "time out" >> "${log_path}"

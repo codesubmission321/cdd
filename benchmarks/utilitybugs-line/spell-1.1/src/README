@@ -1,0 +1,21 @@
+-*- text -*-
+
+  Copyright (C) 1996, 2010 Free Software Foundation, Inc.
+
+   Copying and distribution of this file, with or without modification,
+   are permitted in any medium without royalty provided the copyright
+   notice and this notice are preserved.  This file is offered as-is,
+   without any warranty.
+
+
+GNU Spell is a clone of standard Unix `spell', implemented as a
+wrapper to Ispell.  Therefore you must install Ispell before Spell
+will work.  To learn how to install Spell, see the file `INSTALL'.
+
+Please send bug reports to `bug-gnu-utils@prep.ai.mit.edu'.  See the
+section "Problems" in the Spell manual for more information.
+
+Spell is free software.  See the file `COPYING' for copying
+conditions.
+
+-- Thomas Morgan <tmorgan@pobox.com>

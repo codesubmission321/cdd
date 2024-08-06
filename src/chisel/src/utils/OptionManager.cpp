@@ -37,7 +37,8 @@ void OptionManager::showUsage() {
       << "  --stat                 Count the number of statements\n"
       << "  --xref                 Visualize the results only\n"
       << "  --algorithm            Algorithm used to reduce a list, default: chiseldd, candidates: probdd, chiseldd, fastdd, simplifiedprobdd, cdd \n"
-      << "  --id            Specify the id of this trail (for experiment) \n";
+      << "  --shuffle              Shuffle elements with same probability, specify an int for random seed\n"
+      << "  --id                   Specify the id of this trail (for experiment) \n";
 }
 
 static struct option long_options[] = {
@@ -63,6 +64,7 @@ static struct option long_options[] = {
     {"onepass", no_argument, 0, 'B'},
     {"start_from_n", required_argument, 0, 'E'},
     {"init_probability", required_argument, 0, 'I'},
+    {"shuffle", required_argument, 0, 'r'},
     {0, 0, 0, 0}};
 
 static const char *optstring = "ho:t:sDdglcLGCpvSXaiABE";
@@ -89,6 +91,7 @@ bool OptionManager::Stat = false;
 bool OptionManager::XRef = false;
 bool OptionManager::ComplementOnly = false;
 bool OptionManager::Onepass = false;
+int OptionManager::Shuffle = -1;
 int OptionManager::StartFromN = 0;
 float OptionManager::InitProbability = 0.1;
 std::string OptionManager::Algorithm = "chiseldd";
@@ -180,6 +183,9 @@ void OptionManager::handleOptions(int argc, char *argv[]) {
       break;
     case 'I':
       OptionManager::InitProbability = std::stof(std::string(optarg));
+      break;
+    case 'r':
+      OptionManager::Shuffle = std::stoi(std::string(optarg));
       break;
 
     default:

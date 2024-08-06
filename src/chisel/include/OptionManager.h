@@ -32,6 +32,7 @@ public:
   static bool ComplementOnly;
   static bool Onepass;
   static int StartFromN;
+  static int Shuffle;
   static float InitProbability;
 
   static void showUsage();

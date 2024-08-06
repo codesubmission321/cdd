@@ -230,11 +230,21 @@ bool intersect(std::vector<int>& A,std::vector<int>& B){
   return false;
 }
 
-std::vector<int> sort_index(std::vector<float>& p) {
-  std::vector<int> idx(p.size());
-  iota(idx.begin(),idx.end(),0);
-  stable_sort(idx.begin(),idx.end(),[&p](int i1, int i2) {return p[i1] < p[i2];});
-  return idx;
+std::vector<int> sort_index(std::vector<float>& p, int shuffle) {
+    std::vector<int> idx(p.size());
+    std::iota(idx.begin(), idx.end(), 0);
+
+    // Shuffle the indices using the provided seed if shuffle is not -1
+    if (shuffle != -1) {
+        std::mt19937 g(shuffle);
+        std::shuffle(idx.begin(), idx.end(), g);
+    }
+
+    std::stable_sort(idx.begin(), idx.end(), [&p](int i1, int i2) {
+        return p[i1] < p[i2];
+    });
+
+    return idx;
 }
 
 std::vector<int> sort_index_counter(std::vector<int>& counters) {
@@ -244,9 +254,9 @@ std::vector<int> sort_index_counter(std::vector<int>& counters) {
   return idx;
 }
 
-std::vector<int> sample(std::vector<float>& p) {
+std::vector<int> sample(std::vector<float>& p, int shuffle) {
   std::vector<int> res;
-  std::vector<int> idx = sort_index(p);
+  std::vector<int> idx = sort_index(p, shuffle);
   double tmp = 1;
   double last = 0;
   int k = 0;
@@ -507,6 +517,7 @@ DDElementSet Reduction::doProbDD(DDElementVector &Decls) {
   float initialP=OptionManager::InitProbability;
   float threshold=0.8;
   bool restrictionToOne=false;
+  int shuffle=OptionManager::Shuffle;
   
   std::vector<float> p(len,initialP);
   std::vector<int> index;
@@ -516,7 +527,7 @@ DDElementSet Reduction::doProbDD(DDElementVector &Decls) {
   while (true) {
     spdlog::get("Logger")->info("Config size: {}", configSize);
     // select a subsequence for testing
-    index=sample(p);
+    index=sample(p, shuffle);
     program.clear();
     spdlog::get("Logger")->info("Selected deletion size: {}", index.size());
 

@@ -1,7 +1,7 @@
 import sys
 
 BENCHMARK_LIST = ['clang-22382', 'clang-23353',
-                  'clang-25900', 'clang-27747',
+                  'clang-25900', 'clang-27747', 'gcc-59903', 'gcc-61383',
                   'gcc-61917', 'gcc-65383', 'gcc-71626']
 
 S0 = 10

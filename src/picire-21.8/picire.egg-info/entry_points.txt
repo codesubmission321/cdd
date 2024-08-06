@@ -1,2 +1,0 @@
-[console_scripts]
-picire = picire.cli:execute
